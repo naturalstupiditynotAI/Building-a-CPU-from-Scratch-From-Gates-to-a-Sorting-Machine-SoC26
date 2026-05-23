@@ -92,7 +92,7 @@ module pc(
 
 ## Exercises
 
-First do the select problems in HDLBits that will build up to these modules then go to `Exercises`.
+First do the select problems in HDLBits that will build up to these modules then go to the `Assignment`.
 
 ---
 
