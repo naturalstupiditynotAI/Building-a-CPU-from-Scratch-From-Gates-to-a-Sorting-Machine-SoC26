@@ -10,10 +10,11 @@ module regfile(
     output [7:0] rdata0, rdata1
 );
     reg [7:0] regs [3:0]; //4 registers, each 8 bits wide
-        regs[0]=7'b0; 
+   initial begin     regs[0]=7'b0; 
         regs[1]=7'b0; 
         regs[2]=7'b0;
         regs[3]=7'b0; 
+   end
     always @(posedge clk) begin
         
         if (we)
