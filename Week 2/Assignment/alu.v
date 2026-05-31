@@ -28,8 +28,14 @@ module alu(
             3'b010: result = a&b;
             3'b011: result = a|b;
             3'b100: result = a^b;
-            3'b101: result = a<< 1;
-            3'b110: result = a>> 1;
+            3'b101: begin 
+                temp[8]=a[7];
+                result = a<< 1;
+            end
+            3'b110: begin
+                temp[8]=a[0]; 
+                result = a>> 1;
+            end
 
         endcase
 
@@ -37,7 +43,7 @@ module alu(
               zero=1; 
           else zero=0; 
           
-          if(op==3'b000||op==3'b001)
+        if(op==3'b000||op==3'b001||op==3'b101||op==3'b110)
               carry=temp[8]; 
           else carry=1'b0; 
 
