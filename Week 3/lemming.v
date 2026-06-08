@@ -119,5 +119,65 @@ assign digging =(state[DR]| state[DL]);
    
 endmodule
 
+//7 states FSM 
+module lemmings_4(
+    input clk,
+    input areset,    // Freshly brainwashed Lemmings walk left.
+    input bump_left,
+    input bump_right,
+    input ground,
+    input dig,
+    output walk_left,
+    output walk_right,
+    output aaah,
+    output digging ); 
+    
+    reg [5:0] state, nextstate;
+    reg [4:0]track; reg death;
+parameter L=0, R=1, FL=2, FR=3,DL=4, DR=5;
+    initial begin track=0; state[L]=1; end
+
+always@(*) begin
+    if(~death) begin
+    nextstate[L]= (state[L]&~bump_left&ground | state[FL]&ground|state[R]&bump_right&ground);
+    nextstate[R]= state[R]&~bump_right&ground | state[FR]&ground | state[L]&bump_left&ground;
+nextstate[FL]= state[L]&~ground | state[DL]&~ground|state[FL]&~ground;
+nextstate[FR]=state[R]&~ground | state[DR]&~ground | state[FR]&~ground;
+    nextstate[DL]= state[L]&dig&ground |state[DL]&ground;
+    nextstate[DR]= state[R]&dig&ground|state[DR]&ground;
+        if(nextstate[DL]|nextstate[DR]) begin 
+            nextstate[L]=0; 
+            nextstate[R]=0; end end
+    else begin
+        nextstate[L]=0;
+    nextstate[R]=0;
+    nextstate[DL]=0;
+    nextstate[DR]=0;
+        nextstate[FL]=state[FL]&~ground;
+        nextstate[FR]= state[FR]&~ground;
+    end end
+
+always@(posedge clk, posedge areset) begin
+if(areset) begin
+    state[L]<=1;
+    state[R]<=0; state[FR]<=0; state[DR]<=0; state[DL]<=0; state[FL]<=0;death<=0; end
+else
+    begin   state<=nextstate; 
+    
+        if(~ground) begin
+        track<=track+1;
+        if(track>19) 
+        death<=1; 
+        end
+        if(ground) track<=0; 
+    end end
+
+assign walk_left= (state[L]);
+assign walk_right= (state[R]);
+assign aaah= (state[FR]|state[FL]);
+assign digging =(state[DR]| state[DL]);
+   
+endmodule
+
 
 
