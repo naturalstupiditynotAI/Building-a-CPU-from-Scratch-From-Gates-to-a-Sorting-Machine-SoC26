@@ -1,4 +1,4 @@
-# Week 5 - Single Cycle CPU Design
+# Week 6 - Multi-Cycle CPU Design
 
 ## Objective
 
